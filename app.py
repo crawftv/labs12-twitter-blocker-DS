@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, jsonify, json
 from decouple import config
-from flask_cors import CORS
 import numpy as np
 import requests
 import networkx as nx
@@ -9,12 +8,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 import pandas as pd
 import re
 from collections import Counter
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
-import nest_asyncio
 from itertools import chain
 
-nest_asyncio.apply()
+app = Flask(__name__)
 
 
 def get_network(user):
@@ -75,28 +71,28 @@ def get_network(user):
     return x, y, node_x, node_y, user, node_list, node_weights
 
 
-def create_app():
-    app = Flask(__name__)
-    CORS(app)
 
-    @app.route("/")
-    def root():
-        return render_template("root.html")
 
-    @app.route("/network", methods=["GET"])
-    def network():
-        user = request.values["user"]
-        user = user.replace("@", "")
-        x, y, node_x, node_y, user, node_list, node_weights = get_network(user)
-        return render_template(
-            "network.html",
-            edge_x=x,
-            edge_y=y,
-            node_x=node_x,
-            node_y=node_y,
-            user=user,
-            node_list=node_list,
-            node_weights=node_weights,
-        )
+@app.route("/")
+def root():
+    return render_template("root.html")
 
-    return app
+@app.route("/network", methods=["GET"])
+def network():
+    user = request.values["user"]
+    user = user.replace("@", "")
+    x, y, node_x, node_y, user, node_list, node_weights = get_network(user)
+    return render_template(
+        "network.html",
+        edge_x=x,
+        edge_y=y,
+        node_x=node_x,
+        node_y=node_y,
+        user=user,
+        node_list=node_list,
+        node_weights=node_weights,
+    )
+
+if __name__=="__main__":
+    app.run(host='0.0.0.0')
+
