@@ -1,0 +1,23 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+flask = "*"
+flask-cors = "*"
+pandas = "*"
+numpy = "*"
+scikit-learn = "*"
+tweepy = "*"
+python-decouple = "*"
+python-dotenv = "*"
+networkx = "*"
+gunicorn = "*"
+nest-asyncio = "*"
+asyncio = "*"
+
+[requires]
+python_version = "3.6"
